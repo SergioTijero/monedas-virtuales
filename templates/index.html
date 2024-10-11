@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Ventas de Monedas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Sistema de Ventas de Monedas Virtuales</h1>
+    <p>Stock actual: {{ stock }}</p>
+
+    <h2>Registrar Venta</h2>
+    <form action="{{ url_for('registrar_venta') }}" method="POST">
+        <input type="text" name="usuario" placeholder="Nombre del usuario" required>
+        <input type="number" name="cantidad" placeholder="Cantidad de monedas" required>
+        <button type="submit">Registrar Venta</button>
+    </form>
+
+    <h2>Aumentar Stock</h2>
+    <form action="{{ url_for('aumentar_stock') }}" method="POST">
+        <input type="number" name="cantidad" placeholder="Cantidad de monedas" required>
+        <button type="submit">Aumentar Stock</button>
+    </form>
+
+    <h2>Ventas Registradas</h2>
+    <ul>
+        {% for venta in ventas %}
+        <li>{{ venta.usuario }} - {{ venta.cantidad }} monedas</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
