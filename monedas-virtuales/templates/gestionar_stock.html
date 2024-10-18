@@ -1,0 +1,12 @@
+<form method="POST" action="{{ url_for('main.gestionar_stock') }}">
+    <label>Tipo de Moneda:</label>
+    <input type="text" name="currency_type" required>
+    <label>Cantidad a Añadir:</label>
+    <input type="number" name="quantity" required>
+    <button type="submit">Añadir al Stock</button>
+</form>
+
+<h2>Stock Actual</h2>
+{% for stock in stocks %}
+    <p>{{ stock.currency_type }}: {{ stock.quantity }}</p>
+{% endfor %}
