@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registrar Venta - Sistema de Ventas de Monedas</title>
-</head>
-<body>
-    <h1>Registrar Venta</h1>
-    <form action="{{ url_for('registrar_venta') }}" method="POST">
-        <input type="text" name="usuario" placeholder="Nombre del usuario" required>
-        <input type="number" name="cantidad" placeholder="Cantidad de monedas" required>
-        <button type="submit">Registrar Venta</button>
-    </form>
-    <a href="{{ url_for('options') }}">Volver a opciones</a>
-</body>
-</html>
+<form method="POST" action="{{ url_for('main.registrar_venta') }}">
+    <label>Nickname del Cliente:</label>
+    <input type="text" name="customer_nickname" required>
+    <label>Tipo de Moneda:</label>
+    <input type="text" name="currency_type" required>
+    <label>Cantidad:</label>
+    <input type="number" name="amount" required>
+    <button type="submit">Registrar Venta</button>
+</form>
+
+<h2>Últimas Ventas</h2>
+{% for sale in sales %}
+    <p>{{ sale.customer_nickname }} compró {{ sale.amount }} de {{ sale.currency_type }}. Stock restante: {{ sale.remaining_stock }}</p>
+{% endfor %}
