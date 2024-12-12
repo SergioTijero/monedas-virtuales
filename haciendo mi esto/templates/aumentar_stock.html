@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aumentar Stock</title>
+</head>
+<body>
+    <h1>Aumentar Stock</h1>
+    <form method="POST">
+        <label for="tipo_moneda">Tipo de Moneda</label>
+        <select name="tipo_moneda" id="tipo_moneda">
+            {% for moneda in monedas %}
+                <option value="{{ moneda }}">{{ moneda }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="cantidad">Cantidad</label>
+        <input type="number" name="cantidad" id="cantidad" required><br><br>
+
+        <label for="precio_compra">Precio de Compra</label>
+        <input type="number" name="precio_compra" id="precio_compra" step="0.01" required><br><br>
+
+        <label for="precio_venta">Precio de Venta</label>
+        <input type="number" name="precio_venta" id="precio_venta" step="0.01" required><br><br>
+
+        <button type="submit">Actualizar Stock</button>
+    </form>
+    <br>
+    <a href="{{ url_for('options') }}"><button>Volver a Opciones</button></a>
+</body>
+</html>
