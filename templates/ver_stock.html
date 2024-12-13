@@ -3,31 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
     <title>Stock Actual</title>
 </head>
 <body>
-    <h1>Stock Actual</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Tipo de Moneda</th>
-                <th>Stock</th>
-                <th>Precio de Compra</th>
-                <th>Precio de Venta</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in stock %}
+
+    <aside>
+        <nav>
+            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
+            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
+            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
+            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
+            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
+            <a href="{{ url_for('compras') }}">Ver Compras</a>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        </nav>
+    </aside>
+    <section>
+        <h1>Stock Actual</h1>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td>{{ item['tipo'] }}</td>
-                    <td>{{ item['stock'] }}</td>
-                    <td>{{ item['precio_compra'] }}</td>
-                    <td>{{ item['precio_venta'] }}</td>
+                    <th>Tipo de Moneda</th>
+                    <th>Stock</th>
+                    <th>Precio de Compra</th>
+                    <th>Precio de Venta</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{{ url_for('options') }}">Volver a Opciones</a>
+            </thead>
+            <tbody>
+                {% for item in stock %}
+                    <tr>
+                        <td>{{ item['tipo'] }}</td>
+                        <td>{{ item['stock'] }}</td>
+                        <td>{{ item['precio_compra'] }}</td>
+                        <td>{{ item['precio_venta'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('options') }}">Volver a Opciones</a>
+    </section>
 </body>
 </html>

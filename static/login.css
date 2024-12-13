@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+section.login-form-site {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 75%;
+    background-color: #2b2738;
+    padding: 10px;
+    border-radius: 20px;
+    height: 600px;
+}
+
+.login-form-site > div {
+    width: 50% !important;
+}
+
+img {
+    width: auto;
+    height: 100%;
+    border-radius: 20px;
+}
+
+div#form-st {
+    display: flex;
+    padding: 40px;
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    font-size: 35px;
+}

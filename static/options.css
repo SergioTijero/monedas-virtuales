@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+nav > a {
+    width: 30%;
+    height: 120px;
+    background-color: #005dfb;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+nav > a:hover{
+    background-color: #6e54b5 !important;
+}
+
+nav > a:last-child {
+    background-color: #2b2738 !important;
+    margin-left: 32%;
+}
+
+h1 {
+    justify-self: center;
+    font-size: 35px;
+    color: white;
+}

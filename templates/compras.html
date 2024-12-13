@@ -2,15 +2,30 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
     <title>Compras Registradas - Sistema de Ventas de Monedas</title>
 </head>
 <body>
-    <h1>Compras Registradas</h1>
-    <ul>
-        {% for compra in compras %}
-            <li>{{ compra['cantidad'] }} de {{ compra['nombre'] }} a un precio de compra de {{ compra['precio_compra'] }} y precio de venta de {{ compra['precio_venta'] }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('options') }}">Volver a opciones</a>
+    <aside>
+        <nav>
+            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
+            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
+            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
+            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
+            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
+            <a href="{{ url_for('compras') }}">Ver Compras</a>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        </nav>
+    </aside>
+    <section>
+        <h1>Compras Registradas</h1>
+        <ul>
+            {% for compra in compras %}
+                <li>{{ compra['cantidad'] }} de {{ compra['nombre'] }} a un precio de compra de {{ compra['precio_compra'] }} y precio de venta de {{ compra['precio_venta'] }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('options') }}">Volver a opciones</a>
+    </section>
 </body>
 </html>

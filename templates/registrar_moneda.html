@@ -3,26 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
     <title>Registrar Nueva Moneda</title>
 </head>
 <body>
-    <h1>Registrar Nueva Moneda</h1>
-    <form method="POST">
-        <label for="tipo">Tipo de Moneda</label>
-        <input type="text" name="tipo" id="tipo" required><br><br>
+    <aside>
+        <nav>
+            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
+            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
+            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
+            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
+            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
+            <a href="{{ url_for('compras') }}">Ver Compras</a>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        </nav>
+    </aside>
+    <section>
+        <h1>Registrar Nueva Moneda</h1>
+        <form method="POST">
+            <label for="tipo">Tipo de Moneda</label>
+            <input type="text" name="tipo" id="tipo" required><br><br>
 
-        <label for="stock">Stock Inicial</label>
-        <input type="number" name="stock" id="stock" required><br><br>
+            <label for="stock">Stock Inicial</label>
+            <input type="number" name="stock" id="stock" required><br><br>
 
-        <label for="precio_compra">Precio de Compra</label>
-        <input type="number" name="precio_compra" id="precio_compra" step="0.01" required><br><br>
+            <label for="precio_compra">Precio de Compra</label>
+            <input type="number" name="precio_compra" id="precio_compra" step="0.01" required><br><br>
 
-        <label for="precio_venta">Precio de Venta</label>
-        <input type="number" name="precio_venta" id="precio_venta" step="0.01" required><br><br>
+            <label for="precio_venta">Precio de Venta</label>
+            <input type="number" name="precio_venta" id="precio_venta" step="0.01" required><br><br>
 
-        <button type="submit">Registrar Moneda</button>
-    </form>
-    <br>
-    <a href="{{ url_for('options') }}"><button>Volver a Opciones</button></a>
+            <button type="submit">Registrar Moneda</button>
+        </form>
+        <br>
+        <a href="{{ url_for('options') }}"><button>Volver a Opciones</button></a>
+    </section>
+
 </body>
 </html>

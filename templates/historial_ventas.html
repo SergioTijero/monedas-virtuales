@@ -3,32 +3,48 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Ventas</title>
 </head>
 <body>
-    <h1>Historial de Ventas</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Tipo de Moneda</th>
-                <th>Cantidad</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for venta in ventas %}
+    <aside>
+        <nav>
+            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
+            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
+            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
+            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
+            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
+            <a href="{{ url_for('compras') }}">Ver Compras</a>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        </nav>
+    </aside>
+    <section>
+        <h1>Historial de Ventas</h1>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td>{{ venta['usuario'] }}</td>
-                    <td>{{ venta['tipo_moneda'] }}</td>
-                    <td>{{ venta['cantidad'] }}</td>
-                    <td>{{ venta['fecha'] }}</td>
+                    <th>Usuario</th>
+                    <th>Tipo de Moneda</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{{ url_for('options') }}">Volver a Opciones</a>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                    <tr>
+                        <td>{{ venta['usuario'] }}</td>
+                        <td>{{ venta['tipo_moneda'] }}</td>
+                        <td>{{ venta['cantidad'] }}</td>
+                        <td>{{ venta['fecha'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('options') }}">Volver a Opciones</a>
+    </section>
+
 </body>
 </html>

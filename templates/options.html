@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='options.css') }}">
     <title>Opciones</title>
 </head>
 <body>
-    <h1>Opciones</h1>
-    <ul>
-        <li><a href="{{ url_for('registrar_venta') }}">Registrar Venta</a></li>
-        <li><a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a></li>
-        <li><a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a></li>
-        <li><a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a></li>
-        <li><a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a></li>
-        <li><a href="{{ url_for('compras') }}">Ver Compras</a></li>
-        <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
-    </ul>
+    <section>
+        <h1>Opciones</h1>
+        <nav>
+            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
+            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
+            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
+            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
+            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
+            <a href="{{ url_for('compras') }}">Ver Compras</a>
+            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+        </nav>
+    </section>
+
 </body>
 </html>

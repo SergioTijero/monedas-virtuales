@@ -1,0 +1,55 @@
+body{
+    display: flex;
+}
+
+aside {
+    width: 33%;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+nav > a {
+    background-color: #005dfb;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 70px;
+}
+
+nav > a:hover{
+    background-color: #6e54b5 !important;
+}
+
+section {
+    width: 67%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section > a {
+    height: 40px;
+    border-radius: 10px;
+    background-color: #3b364c;
+    text-decoration: none;
+    color: white;
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+}
+
+form {
+    width: 70%;
+}
+

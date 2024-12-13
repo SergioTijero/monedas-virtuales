@@ -1,0 +1,75 @@
+body {
+    margin: 0px !important;
+    background-color: #676179;
+    padding: 20px;
+    height: 95vh !important;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    width: 100%;
+    background-color: #3b364c;
+    height: 40px;
+    border-radius: 10px;
+    border-width: 0px;
+    color: white !important;
+}
+
+select {
+    height: 40px;
+    border-radius: 10px;
+    background-color: #3b364c;
+    color: white;
+}
+
+button {
+    background-color: #6e54b5;
+    height: 40px;
+    border-radius: 10px;
+    border-width: 0;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #666078;
+}
+
+h1 {
+    justify-self: center;
+    font-size: 35px;
+    color: white;
+}
+
+table {
+    border-color: white;
+    border-style: none;
+    gap: 0px !important;
+    border-spacing: 0px;
+}
+
+thead {
+    color: white;
+    font-size: 20px;
+}
+
+td {
+    padding: 20px;
+}
+
+ul#msg-flash {
+    position: absolute;
+    top: 0;
+    list-style: none;
+    background: #ffffff40;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
+
