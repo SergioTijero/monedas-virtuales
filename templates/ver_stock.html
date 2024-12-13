@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Actual</title>
+</head>
+<body>
+    <h1>Stock Actual</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Tipo de Moneda</th>
+                <th>Stock</th>
+                <th>Precio de Compra</th>
+                <th>Precio de Venta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in stock %}
+                <tr>
+                    <td>{{ item['tipo'] }}</td>
+                    <td>{{ item['stock'] }}</td>
+                    <td>{{ item['precio_compra'] }}</td>
+                    <td>{{ item['precio_venta'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{{ url_for('options') }}">Volver a Opciones</a>
+</body>
+</html>

@@ -2,13 +2,19 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Opciones - Sistema de Ventas de Monedas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opciones</title>
 </head>
 <body>
-    <h1>Selecciona una opción</h1>
+    <h1>Opciones</h1>
     <ul>
         <li><a href="{{ url_for('registrar_venta') }}">Registrar Venta</a></li>
+        <li><a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a></li>
+        <li><a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a></li>
         <li><a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a></li>
+        <li><a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a></li>
+        <li><a href="{{ url_for('compras') }}">Ver Compras</a></li>
+        <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
     </ul>
 </body>
 </html>
