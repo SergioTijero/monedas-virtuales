@@ -1,40 +1,56 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Sistema de Ventas de Monedas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-    <section class="login-form-site">
-        <div>
-            <img src="{{ url_for('static', filename='epic_charge.png') }}">
+{% block title %}Iniciar Sesión - Sistema de Monedas Virtuales{% endblock %}
+
+{% block extra_head %}
+<style>
+    .main-content {
+        padding-top: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card animate__animated animate__zoomIn" data-aos="zoom-in">
+        <img src="{{ url_for('static', filename='epic_charge.png') }}" alt="Logo" class="login-logo">
+        <h1 class="login-title">Iniciar Sesión</h1>
+        
+        <form action="{{ url_for('login') }}" method="POST" class="form-container">
+            <div class="form-field" data-aos="fade-up" data-aos-delay="100">
+                <label for="username">
+                    <span class="material-icons">person</span>
+                    Usuario
+                </label>
+                <input type="text" 
+                       id="username" 
+                       name="username" 
+                       placeholder="Ingresa tu nombre de usuario" 
+                       required>
+            </div>
+            
+            <div class="form-field" data-aos="fade-up" data-aos-delay="200">
+                <label for="password">
+                    <span class="material-icons">lock</span>
+                    Contraseña
+                </label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       placeholder="Ingresa tu contraseña" 
+                       required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;" data-aos="fade-up" data-aos-delay="300">
+                <span class="material-icons">login</span>
+                Iniciar Sesión
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 24px; color: var(--md-sys-color-on-surface-variant); font-size: 0.875rem;" data-aos="fade-up" data-aos-delay="400">
+            <p>Usuario por defecto: <strong>admin</strong></p>
+            <p>Contraseña: <strong>admin123</strong></p>
         </div>
-
-        <div id="form-st">
-            <h1>Iniciar Sesión</h1>
-            <form action="{{ url_for('login') }}" method="POST">
-                <input type="text" name="username" placeholder="Nombre de usuario" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-
-        </div>
-
-    </section>
-
-
-    <!-- Mostrar mensajes flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul id="msg-flash">
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

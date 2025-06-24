@@ -263,4 +263,4 @@ def compras():
 
 if __name__ == '__main__':
     inicializar_base_de_datos()
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

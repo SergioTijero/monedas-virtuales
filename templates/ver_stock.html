@@ -1,49 +1,257 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
-    <title>Stock Actual</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <aside>
-        <nav>
-            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
-            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
-            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
-            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
-            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
-            <a href="{{ url_for('compras') }}">Ver Compras</a>
-            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
-        </nav>
-    </aside>
-    <section>
-        <h1>Stock Actual</h1>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Tipo de Moneda</th>
-                    <th>Stock</th>
-                    <th>Precio de Compra</th>
-                    <th>Precio de Venta</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in stock %}
+{% block title %}Stock Actual - Sistema de Monedas Virtuales{% endblock %}
+{% block page_title %}Inventario{% endblock %}
+
+{% block content %}
+<div class="card" data-aos="fade-up">
+    <div class="card-header">
+        <h2 class="card-title">Stock Actual de Monedas</h2>
+        <p class="card-subtitle">Consulta el inventario disponible</p>
+    </div>
+    <div class="card-content">
+        {% if stock %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ item['tipo'] }}</td>
-                        <td>{{ item['stock'] }}</td>
-                        <td>{{ item['precio_compra'] }}</td>
-                        <td>{{ item['precio_venta'] }}</td>
+                        <th>
+                            <span class="material-icons">toll</span>
+                            Tipo de Moneda
+                        </th>
+                        <th>
+                            <span class="material-icons">inventory</span>
+                            Stock
+                        </th>
+                        <th>
+                            <span class="material-icons">shopping_cart</span>
+                            Precio Compra
+                        </th>
+                        <th>
+                            <span class="material-icons">sell</span>
+                            Precio Venta
+                        </th>
+                        <th>
+                            <span class="material-icons">trending_up</span>
+                            Margen
+                        </th>
+                        <th>
+                            <span class="material-icons">timeline</span>
+                            Estado
+                        </th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        <a href="{{ url_for('options') }}">Volver a Opciones</a>
-    </section>
-</body>
-</html>
+                </thead>
+                <tbody>
+                    {% for item in stock %}
+                    <tr data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                        <td>
+                            <div class="coin-info">
+                                <div class="coin-icon">
+                                    <span class="material-icons">toll</span>
+                                </div>
+                                <strong>{{ item.tipo }}</strong>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="stock-badge {% if item.stock > 100 %}high{% elif item.stock > 50 %}medium{% else %}low{% endif %}">
+                                {{ item.stock }}
+                            </span>
+                        </td>
+                        <td class="price">${{ "%.2f"|format(item.precio_compra) }}</td>
+                        <td class="price">${{ "%.2f"|format(item.precio_venta) }}</td>
+                        <td class="margin">
+                            {% set margin = ((item.precio_venta - item.precio_compra) / item.precio_compra * 100) %}
+                            <span class="margin-badge {% if margin > 20 %}high{% elif margin > 10 %}medium{% else %}low{% endif %}">
+                                {{ "%.1f"|format(margin) }}%
+                            </span>
+                        </td>
+                        <td>
+                            {% if item.stock > 50 %}
+                                <span class="status-badge available">
+                                    <span class="material-icons">check_circle</span>
+                                    Disponible
+                                </span>
+                            {% elif item.stock > 10 %}
+                                <span class="status-badge warning">
+                                    <span class="material-icons">warning</span>
+                                    Bajo Stock
+                                </span>
+                            {% else %}
+                                <span class="status-badge critical">
+                                    <span class="material-icons">error</span>
+                                    Stock Crítico
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state" data-aos="fade-up">
+            <span class="material-icons">inventory_2</span>
+            <h3>No hay monedas registradas</h3>
+            <p>Comienza registrando tu primera moneda virtual</p>
+            <a href="{{ url_for('registrar_moneda') }}" class="btn btn-primary">
+                <span class="material-icons">add</span>
+                Registrar Primera Moneda
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="action-buttons" data-aos="fade-up" data-aos-delay="200">
+    <a href="{{ url_for('aumentar_stock') }}" class="btn btn-primary">
+        <span class="material-icons">add_box</span>
+        Aumentar Stock
+    </a>
+    <a href="{{ url_for('registrar_moneda') }}" class="btn btn-outlined">
+        <span class="material-icons">toll</span>
+        Nueva Moneda
+    </a>
+    <a href="{{ url_for('options') }}" class="btn btn-outlined">
+        <span class="material-icons">arrow_back</span>
+        Volver
+    </a>
+</div>
+
+<style>
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.coin-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coin-icon .material-icons {
+    font-size: 18px;
+    color: var(--md-sys-color-on-primary);
+}
+
+.stock-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.stock-badge.high {
+    background-color: var(--md-sys-color-success-container);
+    color: var(--md-sys-color-success);
+}
+
+.stock-badge.medium {
+    background-color: #FFF8E1;
+    color: #F57C00;
+}
+
+.stock-badge.low {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-error);
+}
+
+.margin-badge {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.margin-badge.high {
+    background-color: var(--md-sys-color-success-container);
+    color: var(--md-sys-color-success);
+}
+
+.margin-badge.medium {
+    background-color: #FFF8E1;
+    color: #F57C00;
+}
+
+.margin-badge.low {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-error);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.available {
+    background-color: var(--md-sys-color-success-container);
+    color: var(--md-sys-color-success);
+}
+
+.status-badge.warning {
+    background-color: #FFF8E1;
+    color: #F57C00;
+}
+
+.status-badge.critical {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-error);
+}
+
+.status-badge .material-icons {
+    font-size: 16px;
+}
+
+.price {
+    font-weight: 500;
+    color: var(--md-sys-color-primary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 64px 32px;
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.empty-state .material-icons {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin-bottom: 8px;
+    color: var(--md-sys-color-on-surface);
+}
+
+.empty-state p {
+    margin-bottom: 24px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+}
+</style>
+{% endblock %}

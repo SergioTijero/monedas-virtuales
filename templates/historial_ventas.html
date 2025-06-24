@@ -1,50 +1,129 @@
-<!-- historial_ventas.html -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Ventas</title>
-</head>
-<body>
-    <aside>
-        <nav>
-            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
-            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
-            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
-            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
-            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
-            <a href="{{ url_for('compras') }}">Ver Compras</a>
-            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
-        </nav>
-    </aside>
-    <section>
-        <h1>Historial de Ventas</h1>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Tipo de Moneda</th>
-                    <th>Cantidad</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for venta in ventas %}
-                    <tr>
-                        <td>{{ venta['usuario'] }}</td>
-                        <td>{{ venta['tipo_moneda'] }}</td>
-                        <td>{{ venta['cantidad'] }}</td>
-                        <td>{{ venta['fecha'] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        <a href="{{ url_for('options') }}">Volver a Opciones</a>
-    </section>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Historial de Ventas - Sistema de Monedas{% endblock %}
+{% block page_title %}Historial de Ventas{% endblock %}
+
+{% block content %}
+<div class="container" data-aos="fade-up">
+    <div class="card table-card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <span class="material-icons">history</span>
+                Historial de Ventas
+            </h2>
+            <p class="card-subtitle">Registro completo de todas las transacciones realizadas</p>
+        </div>
+        
+        <div class="card-content">
+            {% if ventas %}
+                <div class="table-container" data-aos="fade-up" data-aos-delay="200">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="material-icons">person</span>
+                                    Usuario
+                                </th>
+                                <th>
+                                    <span class="material-icons">toll</span>
+                                    Moneda
+                                </th>
+                                <th>
+                                    <span class="material-icons">inventory_2</span>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    <span class="material-icons">schedule</span>
+                                    Fecha
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venta in ventas %}
+                                <tr data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                                    <td>
+                                        <div class="table-cell-content">
+                                            <span class="material-icons cell-icon">account_circle</span>
+                                            <span class="cell-text">{{ venta['usuario'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-cell-content">
+                                            <span class="crypto-badge">{{ venta['tipo_moneda'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-cell-content">
+                                            <span class="quantity-badge">{{ venta['cantidad'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-cell-content">
+                                            <span class="date-text">{{ venta['fecha'] }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state" data-aos="fade-up" data-aos-delay="200">
+                    <span class="material-icons empty-icon">receipt_long</span>
+                    <h3>No hay ventas registradas</h3>
+                    <p>Cuando realices ventas, aparecerán aquí</p>
+                    <a href="{{ url_for('registrar_venta') }}" class="btn btn-primary">
+                        <span class="material-icons">add</span>
+                        Registrar Primera Venta
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.crypto-badge {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quantity-badge {
+    background: var(--success-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    min-width: 2rem;
+    text-align: center;
+    display: inline-block;
+}
+
+.date-text {
+    color: var(--text-secondary);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.875rem;
+}
+
+.table-cell-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cell-icon {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+}
+
+.cell-text {
+    font-weight: 500;
+}
+</style>
+{% endblock %}

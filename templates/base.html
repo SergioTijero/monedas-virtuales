@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Monedas Virtuales{% endblock %}</title>
+    
+    <!-- Material Design 3 CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@material/web@1.0.1/dist/material-web.min.css" rel="stylesheet">
+    
+    <!-- Animate.css para animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern-style.css') }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="opacity: 0;">
+        {% if request.endpoint != 'login' %}
+        <!-- Top App Bar -->
+        <header class="top-app-bar animate__animated animate__slideInDown">
+            <div class="app-bar-content">
+                <div class="app-bar-start">
+                    <button id="menu-toggle" class="icon-button">
+                        <span class="material-icons">menu</span>
+                    </button>
+                    <h1 class="app-title">{% block page_title %}Sistema de Monedas{% endblock %}</h1>
+                </div>
+                <div class="app-bar-end">
+                    <button class="icon-button" onclick="window.location.href='{{ url_for('logout') }}'">
+                        <span class="material-icons">logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Drawer -->
+        <nav id="nav-drawer" class="nav-drawer">
+            <div class="nav-header">
+                <img src="{{ url_for('static', filename='epic_charge.png') }}" alt="Logo" class="nav-logo">
+                <h3>Sistema de Monedas</h3>
+            </div>
+            <div class="nav-items">
+                <a href="{{ url_for('options') }}" class="nav-item" data-aos="fade-right" data-aos-delay="100">
+                    <span class="material-icons">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('registrar_venta') }}" class="nav-item" data-aos="fade-right" data-aos-delay="200">
+                    <span class="material-icons">point_of_sale</span>
+                    <span>Registrar Venta</span>
+                </a>
+                <a href="{{ url_for('historial_ventas') }}" class="nav-item" data-aos="fade-right" data-aos-delay="300">
+                    <span class="material-icons">history</span>
+                    <span>Historial de Ventas</span>
+                </a>
+                <a href="{{ url_for('ver_stock') }}" class="nav-item" data-aos="fade-right" data-aos-delay="400">
+                    <span class="material-icons">inventory</span>
+                    <span>Ver Stock</span>
+                </a>
+                <a href="{{ url_for('aumentar_stock') }}" class="nav-item" data-aos="fade-right" data-aos-delay="500">
+                    <span class="material-icons">add_box</span>
+                    <span>Aumentar Stock</span>
+                </a>
+                <a href="{{ url_for('registrar_moneda') }}" class="nav-item" data-aos="fade-right" data-aos-delay="600">
+                    <span class="material-icons">toll</span>
+                    <span>Nueva Moneda</span>
+                </a>
+                <a href="{{ url_for('compras') }}" class="nav-item" data-aos="fade-right" data-aos-delay="700">
+                    <span class="material-icons">shopping_cart</span>
+                    <span>Ver Compras</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Overlay -->
+        <div id="overlay" class="overlay"></div>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="main-content {% if request.endpoint != 'login' %}with-nav{% endif %}">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages" data-aos="fade-down">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }} animate__animated animate__fadeInDown">
+                                <span class="material-icons">
+                                    {% if category == 'success' %}check_circle
+                                    {% elif category == 'danger' %}error
+                                    {% elif category == 'warning' %}warning
+                                    {% else %}info{% endif %}
+                                </span>
+                                <span>{{ message }}</span>
+                                <button class="close-flash" onclick="this.parentElement.remove()">
+                                    <span class="material-icons">close</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Page Content -->
+            <div class="page-content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='modern-script.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

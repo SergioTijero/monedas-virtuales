@@ -1,25 +1,183 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='options.css') }}">
-    <title>Opciones</title>
-</head>
-<body>
-    <section>
-        <h1>Opciones</h1>
-        <nav>
-            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
-            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
-            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
-            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
-            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
-            <a href="{{ url_for('compras') }}">Ver Compras</a>
-            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
-        </nav>
-    </section>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Dashboard - Sistema de Monedas Virtuales{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header" data-aos="fade-down">
+    <h1 class="page-title">Bienvenido al Sistema de Monedas Virtuales</h1>
+    <p class="page-subtitle">Gestiona tus monedas virtuales de forma eficiente</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid" data-aos="fade-up">
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Tipos de Monedas</div>
+        <span class="material-icons stat-icon">toll</span>
+    </div>
+    
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+        <div class="stat-value">1,247</div>
+        <div class="stat-label">Total en Stock</div>
+        <span class="material-icons stat-icon">inventory</span>
+    </div>
+    
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+        <div class="stat-value">89</div>
+        <div class="stat-label">Ventas del Mes</div>
+        <span class="material-icons stat-icon">trending_up</span>
+    </div>
+    
+    <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+        <div class="stat-value">$15,420</div>
+        <div class="stat-label">Ingresos del Mes</div>
+        <span class="material-icons stat-icon">attach_money</span>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card" data-aos="fade-up" data-aos-delay="500">
+    <div class="card-header">
+        <h2 class="card-title">Acciones Rápidas</h2>
+        <p class="card-subtitle">Gestiona tu inventario y ventas</p>
+    </div>
+    <div class="card-content">
+        <div class="grid grid-3">
+            <a href="{{ url_for('registrar_venta') }}" class="action-card" data-aos="flip-left" data-aos-delay="100">
+                <div class="action-icon">
+                    <span class="material-icons">point_of_sale</span>
+                </div>
+                <h3>Registrar Venta</h3>
+                <p>Procesa una nueva venta de monedas virtuales</p>
+            </a>
+            
+            <a href="{{ url_for('aumentar_stock') }}" class="action-card" data-aos="flip-left" data-aos-delay="200">
+                <div class="action-icon">
+                    <span class="material-icons">add_box</span>
+                </div>
+                <h3>Aumentar Stock</h3>
+                <p>Añade más monedas a tu inventario</p>
+            </a>
+            
+            <a href="{{ url_for('registrar_moneda') }}" class="action-card" data-aos="flip-left" data-aos-delay="300">
+                <div class="action-icon">
+                    <span class="material-icons">toll</span>
+                </div>
+                <h3>Nueva Moneda</h3>
+                <p>Registra un nuevo tipo de moneda virtual</p>
+            </a>
+            
+            <a href="{{ url_for('ver_stock') }}" class="action-card" data-aos="flip-left" data-aos-delay="400">
+                <div class="action-icon">
+                    <span class="material-icons">inventory</span>
+                </div>
+                <h3>Ver Stock</h3>
+                <p>Consulta el inventario actual</p>
+            </a>
+            
+            <a href="{{ url_for('historial_ventas') }}" class="action-card" data-aos="flip-left" data-aos-delay="500">
+                <div class="action-icon">
+                    <span class="material-icons">history</span>
+                </div>
+                <h3>Historial</h3>
+                <p>Revisa las ventas realizadas</p>
+            </a>
+            
+            <a href="{{ url_for('compras') }}" class="action-card" data-aos="flip-left" data-aos-delay="600">
+                <div class="action-icon">
+                    <span class="material-icons">shopping_cart</span>
+                </div>
+                <h3>Compras</h3>
+                <p>Consulta el historial de compras</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.action-card {
+    background: linear-gradient(135deg, var(--md-sys-color-surface) 0%, var(--md-sys-color-primary-container) 100%);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-decoration: none;
+    color: var(--md-sys-color-on-surface);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: var(--elevation-2);
+}
+
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.action-card:hover::before {
+    left: 100%;
+}
+
+.action-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--elevation-4);
+}
+
+.action-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    transition: transform 0.3s ease;
+}
+
+.action-card:hover .action-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.action-icon .material-icons {
+    font-size: 32px;
+    color: var(--md-sys-color-on-primary);
+}
+
+.action-card h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--md-sys-color-on-surface);
+}
+
+.action-card p {
+    font-size: 0.875rem;
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: 1.4;
+}
+</style>
+{% endblock %}

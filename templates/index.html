@@ -1,33 +1,134 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Sistema de Ventas de Monedas Virtuales</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Sistema de Ventas de Monedas Virtuales</h1>
-    <p>Stock actual:</p>
-    <ul>
-        {% for moneda in monedas_stock.values() %}
-            <li>{{ moneda.nombre }}: {{ moneda.saldo }} disponibles</li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
 
-    <h2>Registrar Venta</h2>
-    <form action="{{ url_for('registrar_venta') }}" method="POST">
-        <input type="text" name="usuario" placeholder="Nombre del usuario" required>
-        <input type="number" name="cantidad" placeholder="Cantidad de monedas" required>
-        <button type="submit">Registrar Venta</button>
-    </form>
+{% block title %}Dashboard - Sistema de Monedas{% endblock %}
+{% block page_title %}Dashboard Principal{% endblock %}
 
-    <h2>Aumentar Stock</h2>
-    <form action="{{ url_for('aumentar_stock') }}" method="POST">
-        <select name="nombre" required>
-            {% for moneda in monedas %}
-                <option value="{{ moneda }}">{{ moneda }}</option>
-            {% endfor %}
-        </select>
+{% block content %}
+<div class="container" data-aos="fade-up">
+    <div class="welcome-section" data-aos="fade-up" data-aos-delay="100">
+        <h1 class="welcome-title">¡Bienvenido al Sistema de Monedas Virtuales!</h1>
+        <p class="welcome-subtitle">Gestiona tu portafolio de criptomonedas de manera eficiente</p>
+    </div>
+
+    <div class="quick-actions" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="section-title">Acciones Rápidas</h2>
+        <div class="actions-grid">
+            <a href="{{ url_for('registrar_venta') }}" class="action-card" data-aos="zoom-in" data-aos-delay="300">
+                <span class="material-icons action-icon">point_of_sale</span>
+                <h3>Registrar Venta</h3>
+                <p>Procesa una nueva transacción</p>
+            </a>
+            
+            <a href="{{ url_for('ver_stock') }}" class="action-card" data-aos="zoom-in" data-aos-delay="400">
+                <span class="material-icons action-icon">inventory</span>
+                <h3>Ver Stock</h3>
+                <p>Consulta el inventario actual</p>
+            </a>
+            
+            <a href="{{ url_for('registrar_moneda') }}" class="action-card" data-aos="zoom-in" data-aos-delay="500">
+                <span class="material-icons action-icon">toll</span>
+                <h3>Nueva Moneda</h3>
+                <p>Agrega una nueva criptomoneda</p>
+            </a>
+            
+            <a href="{{ url_for('historial_ventas') }}" class="action-card" data-aos="zoom-in" data-aos-delay="600">
+                <span class="material-icons action-icon">history</span>
+                <h3>Historial</h3>
+                <p>Revisa las transacciones</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-section {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 16px;
+    color: white;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+}
+
+.welcome-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.action-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.action-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.action-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.action-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .welcome-title {
+        font-size: 2rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1rem;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
         <input type="number" name="cantidad" placeholder="Cantidad de monedas" required>
         <input type="number" step="0.01" name="precio_compra" placeholder="Precio de compra" required>
         <input type="number" step="0.01" name="precio_venta" placeholder="Precio de venta" required>

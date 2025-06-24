@@ -1,31 +1,309 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='layout_interno.css') }}">
-    <title>Compras Registradas - Sistema de Ventas de Monedas</title>
-</head>
-<body>
-    <aside>
-        <nav>
-            <a href="{{ url_for('registrar_venta') }}">Registrar Venta</a>
-            <a href="{{ url_for('historial_ventas') }}">Historial de Ventas</a>
-            <a href="{{ url_for('ver_stock') }}">Ver Stock Actual</a>
-            <a href="{{ url_for('aumentar_stock') }}">Aumentar Stock</a>
-            <a href="{{ url_for('registrar_moneda') }}">Registrar Nueva Moneda</a>
-            <a href="{{ url_for('compras') }}">Ver Compras</a>
-            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
-        </nav>
-    </aside>
-    <section>
-        <h1>Compras Registradas</h1>
-        <ul>
-            {% for compra in compras %}
-                <li>{{ compra['cantidad'] }} de {{ compra['nombre'] }} a un precio de compra de {{ compra['precio_compra'] }} y precio de venta de {{ compra['precio_venta'] }}</li>
-            {% endfor %}
-        </ul>
-        <a href="{{ url_for('options') }}">Volver a opciones</a>
-    </section>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Compras Registradas - Sistema de Monedas{% endblock %}
+{% block page_title %}Compras Registradas{% endblock %}
+
+{% block content %}
+<div class="container" data-aos="fade-up">
+    <div class="card table-card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <span class="material-icons">shopping_cart</span>
+                Compras Registradas
+            </h2>
+            <p class="card-subtitle">Resumen de todas las monedas adquiridas y sus precios</p>
+        </div>
+        
+        <div class="card-content">
+            {% if compras %}
+                <div class="compras-grid" data-aos="fade-up" data-aos-delay="200">
+                    {% for compra in compras %}
+                        <div class="compra-card" data-aos="zoom-in" data-aos-delay="{{ loop.index * 100 }}">
+                            <div class="compra-header">
+                                <div class="crypto-info">
+                                    <span class="material-icons crypto-icon">toll</span>
+                                    <div class="crypto-details">
+                                        <h3 class="crypto-name">{{ compra['nombre'] }}</h3>
+                                        <span class="crypto-amount">{{ compra['cantidad'] }} unidades</span>
+                                    </div>
+                                </div>
+                                <div class="profit-indicator">
+                                    {% set profit = compra['precio_venta'] - compra['precio_compra'] %}
+                                    {% if profit >= 0 %}
+                                        <span class="profit-badge positive">
+                                            <span class="material-icons">trending_up</span>
+                                            +${{ "%.2f"|format(profit) }}
+                                        </span>
+                                    {% else %}
+                                        <span class="profit-badge negative">
+                                            <span class="material-icons">trending_down</span>
+                                            ${{ "%.2f"|format(profit) }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="price-details">
+                                <div class="price-item">
+                                    <span class="price-label">
+                                        <span class="material-icons">attach_money</span>
+                                        Precio de Compra
+                                    </span>
+                                    <span class="price-value buy">${{ "%.2f"|format(compra['precio_compra']) }}</span>
+                                </div>
+                                <div class="price-item">
+                                    <span class="price-label">
+                                        <span class="material-icons">sell</span>
+                                        Precio de Venta
+                                    </span>
+                                    <span class="price-value sell">${{ "%.2f"|format(compra['precio_venta']) }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="investment-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Inversión Total</span>
+                                    <span class="summary-value">${{ "%.2f"|format(compra['cantidad'] * compra['precio_compra']) }}</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Valor Actual</span>
+                                    <span class="summary-value">${{ "%.2f"|format(compra['cantidad'] * compra['precio_venta']) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Resumen Total -->
+                <div class="total-summary" data-aos="fade-up" data-aos-delay="400">
+                    {% set total_inversion = compras|sum(attribute='precio_compra')|multiply(compras|sum(attribute='cantidad')) %}
+                    {% set total_valor = compras|sum(attribute='precio_venta')|multiply(compras|sum(attribute='cantidad')) %}
+                    
+                    <div class="summary-card">
+                        <h3>Resumen Total</h3>
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Total Invertido</span>
+                                <span class="stat-value buy">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Valor Actual</span>
+                                <span class="stat-value sell">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Ganancia/Pérdida</span>
+                                <span class="stat-value profit">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state" data-aos="fade-up" data-aos-delay="200">
+                    <span class="material-icons empty-icon">shopping_cart</span>
+                    <h3>No hay compras registradas</h3>
+                    <p>Cuando agregues monedas al stock, aparecerán aquí</p>
+                    <a href="{{ url_for('registrar_moneda') }}" class="btn btn-primary">
+                        <span class="material-icons">add</span>
+                        Registrar Primera Moneda
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.compras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.compra-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.compra-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.compra-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.crypto-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.crypto-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.75rem;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.crypto-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.crypto-amount {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.profit-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.profit-badge.positive {
+    background: #e8f5e8;
+    color: var(--success-color);
+}
+
+.profit-badge.negative {
+    background: #fee;
+    color: var(--error-color);
+}
+
+.price-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.price-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.price-label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-label .material-icons {
+    font-size: 1rem;
+}
+
+.price-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.price-value.buy {
+    color: var(--error-color);
+}
+
+.price-value.sell {
+    color: var(--success-color);
+}
+
+.investment-summary {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.total-summary {
+    margin-top: 2rem;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.summary-card h3 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.5rem;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .compras-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .price-details {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
