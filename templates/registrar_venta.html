@@ -29,12 +29,26 @@
                         <span class="material-icons">toll</span>
                         Tipo de Moneda
                     </label>
-                    <select id="tipo_moneda" name="tipo_moneda" required>
+                    <select id="tipo_moneda" name="tipo_moneda" required onchange="actualizarPrecio()">
                         <option value="">Selecciona una moneda</option>
                         {% for moneda in monedas %}
-                            <option value="{{ moneda }}">{{ moneda }}</option>
+                            <option value="{{ moneda[0] }}" data-precio="{{ moneda[1] }}" data-stock="{{ moneda[2] }}">
+                                {{ moneda[0] }} - ${{ "%.2f"|format(moneda[1]) }} (Stock: {{ moneda[2] }})
+                            </option>
                         {% endfor %}
                     </select>
+                </div>
+                
+                <div class="form-field" data-aos="fade-up" data-aos-delay="250">
+                    <label for="precio_display">
+                        <span class="material-icons">attach_money</span>
+                        Precio Unitario
+                    </label>
+                    <input type="text" 
+                           id="precio_display" 
+                           readonly
+                           placeholder="Selecciona una moneda"
+                           style="background-color: var(--md-sys-color-surface-variant);">
                 </div>
                 
                 <div class="form-field" data-aos="fade-up" data-aos-delay="300">
@@ -47,7 +61,20 @@
                            name="cantidad" 
                            placeholder="Cantidad de monedas" 
                            min="1" 
-                           required>
+                           required
+                           onchange="calcularTotal()">
+                </div>
+                
+                <div class="form-field" data-aos="fade-up" data-aos-delay="350">
+                    <label for="total_display">
+                        <span class="material-icons">calculate</span>
+                        Total a Pagar
+                    </label>
+                    <input type="text" 
+                           id="total_display" 
+                           readonly
+                           placeholder="$0.00"
+                           style="background-color: var(--md-sys-color-surface-variant); font-weight: bold; font-size: 1.2rem;">
                 </div>
                 
                 <div class="form-actions" data-aos="fade-up" data-aos-delay="400">
@@ -91,4 +118,44 @@
     }
 }
 </style>
+
+<script>
+function actualizarPrecio() {
+    const select = document.getElementById('tipo_moneda');
+    const precioDisplay = document.getElementById('precio_display');
+    const totalDisplay = document.getElementById('total_display');
+    
+    if (select.value) {
+        const precio = select.options[select.selectedIndex].dataset.precio;
+        const stock = select.options[select.selectedIndex].dataset.stock;
+        precioDisplay.value = `$${parseFloat(precio).toFixed(2)} (Stock disponible: ${stock})`;
+        calcularTotal();
+    } else {
+        precioDisplay.value = '';
+        totalDisplay.value = '';
+    }
+}
+
+function calcularTotal() {
+    const select = document.getElementById('tipo_moneda');
+    const cantidad = document.getElementById('cantidad').value;
+    const totalDisplay = document.getElementById('total_display');
+    
+    if (select.value && cantidad) {
+        const precio = parseFloat(select.options[select.selectedIndex].dataset.precio);
+        const stock = parseInt(select.options[select.selectedIndex].dataset.stock);
+        const total = precio * parseInt(cantidad);
+        
+        if (parseInt(cantidad) > stock) {
+            totalDisplay.value = `⚠️ Stock insuficiente (disponible: ${stock})`;
+            totalDisplay.style.color = 'var(--md-sys-color-error)';
+        } else {
+            totalDisplay.value = `$${total.toFixed(2)}`;
+            totalDisplay.style.color = 'var(--md-sys-color-primary)';
+        }
+    } else {
+        totalDisplay.value = '';
+    }
+}
+</script>
 {% endblock %}

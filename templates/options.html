@@ -12,29 +12,74 @@
 <!-- Stats Cards -->
 <div class="stats-grid" data-aos="fade-up">
     <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
-        <div class="stat-value">12</div>
+        <div class="stat-value">{{ stats.total_monedas }}</div>
         <div class="stat-label">Tipos de Monedas</div>
         <span class="material-icons stat-icon">toll</span>
     </div>
     
     <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
-        <div class="stat-value">1,247</div>
+        <div class="stat-value">{{ stats.total_stock }}</div>
         <div class="stat-label">Total en Stock</div>
         <span class="material-icons stat-icon">inventory</span>
     </div>
     
     <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
-        <div class="stat-value">89</div>
+        <div class="stat-value">{{ stats.ventas_mes_cantidad }}</div>
         <div class="stat-label">Ventas del Mes</div>
         <span class="material-icons stat-icon">trending_up</span>
     </div>
     
     <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
-        <div class="stat-value">$15,420</div>
+        <div class="stat-value">${{ "%.2f"|format(stats.ventas_mes_ingresos) }}</div>
         <div class="stat-label">Ingresos del Mes</div>
         <span class="material-icons stat-icon">attach_money</span>
     </div>
 </div>
+
+<!-- Alertas de Stock -->
+{% if stats.alertas_stock %}
+<div class="alert-section" data-aos="fade-up" data-aos-delay="500">
+    <div class="card alert-card">
+        <div class="card-header">
+            <h3 class="card-title" style="color: var(--md-sys-color-error);">
+                <span class="material-icons">warning</span>
+                Alertas de Stock Bajo
+            </h3>
+        </div>
+        <div class="card-content">
+            {% for alerta in stats.alertas_stock %}
+            <div class="alert-item">
+                <span class="material-icons">error</span>
+                <strong>{{ alerta[0] }}</strong>: Solo quedan {{ alerta[1] }} unidades (mínimo: {{ alerta[2] }})
+                <a href="{{ url_for('aumentar_stock') }}" class="btn btn-primary btn-small">Reabastecer</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Top Monedas de la Semana -->
+{% if stats.top_monedas %}
+<div class="card" data-aos="fade-up" data-aos-delay="600">
+    <div class="card-header">
+        <h3 class="card-title">🏆 Top Monedas de la Semana</h3>
+    </div>
+    <div class="card-content">
+        <div class="top-monedas-grid">
+            {% for moneda in stats.top_monedas %}
+            <div class="top-moneda-item">
+                <span class="ranking">{{ loop.index }}</span>
+                <div class="moneda-info">
+                    <strong>{{ moneda[0] }}</strong>
+                    <small>{{ moneda[1] }} vendidas</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <!-- Quick Actions -->
 <div class="card" data-aos="fade-up" data-aos-delay="500">
@@ -178,6 +223,80 @@
     font-size: 0.875rem;
     color: var(--md-sys-color-on-surface-variant);
     line-height: 1.4;
+}
+
+/* Nuevos estilos para alertas y estadísticas */
+.alert-section {
+    margin-bottom: 32px;
+}
+
+.alert-card {
+    border-left: 4px solid var(--md-sys-color-error);
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.alert-item:last-child {
+    border-bottom: none;
+}
+
+.alert-item .material-icons {
+    color: var(--md-sys-color-error);
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+.top-monedas-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.top-moneda-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: var(--md-sys-color-surface-variant);
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.top-moneda-item:hover {
+    transform: translateX(4px);
+}
+
+.ranking {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.moneda-info strong {
+    display: block;
+    color: var(--md-sys-color-on-surface);
+}
+
+.moneda-info small {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.75rem;
 }
 </style>
 {% endblock %}
