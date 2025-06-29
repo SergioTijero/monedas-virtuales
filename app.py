@@ -534,4 +534,5 @@ def actualizar_stock_minimo():
 
 if __name__ == '__main__':
     inicializar_base_de_datos()
-    app.run(debug=True, port=5001)
+    # Configurar para EC2: host='0.0.0.0' permite acceso externo
+    app.run(debug=True, host='0.0.0.0', port=8080)
