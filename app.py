@@ -321,14 +321,23 @@ def aumentar_stock():
         conn = obtener_conexion()
         cursor = conn.cursor()
 
-        cursor.execute('''
-            INSERT INTO monedas (tipo, stock, precio_compra, precio_venta)
-            VALUES (?, ?, ?, ?)
-            ON CONFLICT(tipo) DO UPDATE SET
-            stock = stock + excluded.stock,
-            precio_compra = excluded.precio_compra,
-            precio_venta = excluded.precio_venta
-        ''', (tipo_moneda, cantidad, precio_compra, precio_venta))
+        # Verificar si la moneda ya existe
+        cursor.execute("SELECT id FROM monedas WHERE tipo = ?", (tipo_moneda,))
+        moneda_existente = cursor.fetchone()
+        
+        if moneda_existente:
+            # Actualizar moneda existente
+            cursor.execute('''
+                UPDATE monedas 
+                SET stock = stock + ?, precio_compra = ?, precio_venta = ?
+                WHERE tipo = ?
+            ''', (cantidad, precio_compra, precio_venta, tipo_moneda))
+        else:
+            # Insertar nueva moneda
+            cursor.execute('''
+                INSERT INTO monedas (tipo, stock, precio_compra, precio_venta)
+                VALUES (?, ?, ?, ?)
+            ''', (tipo_moneda, cantidad, precio_compra, precio_venta))
 
         conn.commit()
         cursor.close()
