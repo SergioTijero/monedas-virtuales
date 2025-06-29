@@ -196,8 +196,8 @@ def inicializar_base_de_datos():
         )
     ''')
 
-    # Crear un usuario admin con contraseña cifrada
-    hashed_password = generate_password_hash("admin123")
+    # Crear un usuario admin con contraseña cifrada (compatible con Python 3.7)
+    hashed_password = generate_password_hash("admin123", method='pbkdf2:sha256')
     cursor.execute('''
         INSERT OR IGNORE INTO usuarios (username, password)
         VALUES (?, ?)
@@ -541,7 +541,28 @@ def actualizar_stock_minimo():
     flash(f"Stock mínimo de {tipo_moneda} actualizado a {nuevo_minimo}", "success")
     return redirect(url_for('ver_stock'))
 
+def resetear_admin_password():
+    """Resetear la contraseña del admin con hash compatible con Python 3.7"""
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    
+    # Generar hash compatible con Python 3.7
+    hashed_password = generate_password_hash("admin123", method='pbkdf2:sha256')
+    
+    # Actualizar o insertar usuario admin
+    cursor.execute('''
+        INSERT OR REPLACE INTO usuarios (id, username, password)
+        VALUES (1, ?, ?)
+    ''', ("admin", hashed_password))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("✅ Contraseña del admin reseteada con hash compatible Python 3.7")
+
 if __name__ == '__main__':
     inicializar_base_de_datos()
+    # Resetear contraseña admin para asegurar compatibilidad con Python 3.7
+    resetear_admin_password()
     # Configurar para EC2: host='0.0.0.0' permite acceso externo
     app.run(debug=True, host='0.0.0.0', port=8080)

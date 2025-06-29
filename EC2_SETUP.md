@@ -20,14 +20,23 @@ python3 --version
 # Instalar dependencias compatibles con Python 3.7.16
 pip3 install -r requirements.txt
 
+# IMPORTANTE: Si tienes problemas con hash scrypt, ejecuta:
+python3 fix_hash_problem.py
+
 # Ejecutar la aplicación
 python3 app.py
 ```
 
 ## Versiones de dependencias compatibles con Python 3.7.16:
-- Flask==2.0.3
+- Flask==1.1.4
 - Flask-Login==0.5.0
-- Werkzeug==2.0.3
+- Werkzeug==1.0.1
+
+## Solución al problema de hash scrypt:
+Si ves el error "ValueError: unsupported hash type scrypt", ejecuta:
+```bash
+python3 fix_hash_problem.py
+```
 
 ## Acceder a la aplicación:
 - Desde EC2: `http://IP_PUBLICA_DE_TU_EC2:8080`
@@ -40,3 +49,4 @@ python3 app.py
 3. Para detener la aplicación: `Ctrl+C`
 4. Para ejecutar en background: `nohup python3 app.py &`
 5. **Importante**: El código ha sido optimizado para ser compatible con Python 3.7.16 y SQLite versiones anteriores
+6. **Hash scrypt**: Se usa pbkdf2:sha256 para compatibilidad con Python 3.7
