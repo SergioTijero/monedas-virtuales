@@ -1,44 +1,47 @@
-# 🚨 ERROR SCRYPT - SOLUCIÓN INMEDIATA
+# 🚨 ERRORES COMUNES - SOLUCIONES INMEDIATAS
 
-## Error que estás viendo:
+## Error 1: Hash scrypt no soportado
 ```
 ValueError: unsupported hash type scrypt:32768:8:1
 ```
 
-## ⚡ SOLUCIÓN RÁPIDA (En tu EC2):
+## Error 2: Template multiply filter
+```
+TemplateAssertionError: no filter named 'multiply'
+```
 
-### Paso 1: Ejecutar script de solución
+## Error 3: Formulario registrar moneda (400)
+```
+Bad Request - Los campos requeridos faltan o son inválidos
+```
+
+## ⚡ SOLUCIÓN COMPLETA (En tu EC2):
+
+### Paso 1: Actualizar archivos problemáticos
+```bash
+python3 update_ec2.py
+```
+
+### Paso 2: Corregir hash de contraseña
 ```bash
 python3 fix_hash_problem.py
 ```
 
-### Paso 2: Iniciar la aplicación
+### Paso 3: Iniciar aplicación
 ```bash
 python3 app.py
 ```
 
-## 🔧 ¿Qué causa este error?
+## 🔧 ¿Qué solucionan estos scripts?
 
-Python 3.7 **NO SOPORTA** el algoritmo de hash `scrypt` que usa Werkzeug por defecto en versiones nuevas.
+### `update_ec2.py`:
+- ✅ Corrige el filtro `multiply` en `compras.html`
+- ✅ Mejora manejo de errores en formularios
+- ✅ Crea backups de seguridad
 
-## ✅ ¿Cómo lo solucionamos?
-
-1. **Cambiamos las versiones** en `requirements.txt`:
-   ```
-   Flask==1.1.4      # Compatible con Python 3.7
-   Flask-Login==0.5.0
-   Werkzeug==1.0.1   # No usa scrypt por defecto
-   ```
-
-2. **Forzamos el uso de pbkdf2:sha256**:
-   ```python
-   generate_password_hash("admin123", method='pbkdf2:sha256')
-   ```
-
-3. **Script automático** `fix_hash_problem.py` que:
-   - Genera un nuevo hash compatible
-   - Actualiza la base de datos
-   - ¡Listo para usar!
+### `fix_hash_problem.py`:
+- ✅ Resetea contraseña admin con hash compatible
+- ✅ Usa `pbkdf2:sha256` en lugar de `scrypt`
 
 ## 🎯 Credenciales después del fix:
 - **Usuario**: `admin`
@@ -47,7 +50,26 @@ Python 3.7 **NO SOPORTA** el algoritmo de hash `scrypt` que usa Werkzeug por def
 ## 📱 Verificar que funciona:
 1. Ve a: `http://TU_IP_EC2:8080`
 2. Login con admin/admin123
-3. ¡Deberías entrar sin problemas!
+3. Prueba registrar una nueva moneda
+4. Ve la sección "Compras" sin errores
+
+## 🆘 Si sigues teniendo problemas:
+
+### Reinstalar dependencias:
+```bash
+pip3 uninstall -y Flask Flask-Login Werkzeug
+pip3 install -r requirements.txt
+```
+
+### Revisar logs:
+```bash
+tail -f nohup.out  # Si ejecutas con nohup
+```
+
+### Verificar puerto:
+```bash
+sudo netstat -tlnp | grep :8080
+```
 
 ---
-*Este problema es común cuando desarrollas en Python 3.8+ pero despliegas en Python 3.7*
+*Scripts de solución automática para despliegue en EC2*

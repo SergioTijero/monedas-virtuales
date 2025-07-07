@@ -360,16 +360,33 @@ def aumentar_stock():
 @login_required
 def registrar_moneda():
     if request.method == 'POST':
-        tipo = request.form['tipo']
-        stock = int(request.form['stock'])
-        precio_compra = float(request.form['precio_compra'])
-        precio_venta = float(request.form['precio_venta'])
-        categoria = request.form['categoria']
-        stock_minimo = int(request.form.get('stock_minimo', 10))
-
-        conn = obtener_conexion()
-        cursor = conn.cursor()
         try:
+            # Validar que todos los campos requeridos estén presentes
+            campos_requeridos = ['tipo', 'stock', 'precio_compra', 'precio_venta', 'categoria']
+            for campo in campos_requeridos:
+                if campo not in request.form or not request.form[campo]:
+                    flash(f"❌ El campo {campo} es obligatorio", "danger")
+                    return redirect(url_for('registrar_moneda'))
+            
+            tipo = request.form['tipo'].strip()
+            stock = int(request.form['stock'])
+            precio_compra = float(request.form['precio_compra'])
+            precio_venta = float(request.form['precio_venta'])
+            categoria = request.form['categoria']
+            stock_minimo = int(request.form.get('stock_minimo', 10))
+
+            # Validaciones adicionales
+            if stock <= 0:
+                flash("❌ El stock debe ser mayor a 0", "danger")
+                return redirect(url_for('registrar_moneda'))
+            
+            if precio_compra <= 0 or precio_venta <= 0:
+                flash("❌ Los precios deben ser mayores a 0", "danger")
+                return redirect(url_for('registrar_moneda'))
+
+            conn = obtener_conexion()
+            cursor = conn.cursor()
+            
             cursor.execute('''
                 INSERT INTO monedas (tipo, stock, precio_compra, precio_venta, categoria, stock_minimo)
                 VALUES (?, ?, ?, ?, ?, ?)
@@ -384,11 +401,19 @@ def registrar_moneda():
             
             conn.commit()
             flash(f"✅ Moneda {tipo} registrada exitosamente en categoría {categoria}", "success")
-        except sqlite3.IntegrityError:
+            
+        except sqlite3.IntegrityError as e:
             flash("❌ La moneda ya existe", "danger")
+        except ValueError as e:
+            flash(f"❌ Error en los datos: {str(e)}", "danger")
+        except Exception as e:
+            flash(f"❌ Error inesperado: {str(e)}", "danger")
         finally:
-            cursor.close()
-            conn.close()
+            if 'cursor' in locals():
+                cursor.close()
+            if 'conn' in locals():
+                conn.close()
+                
         return redirect(url_for('options'))
 
     # Categorías predefinidas para LAN Center

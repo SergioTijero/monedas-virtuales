@@ -76,23 +76,27 @@
                 
                 <!-- Resumen Total -->
                 <div class="total-summary" data-aos="fade-up" data-aos-delay="400">
-                    {% set total_inversion = compras|sum(attribute='precio_compra')|multiply(compras|sum(attribute='cantidad')) %}
-                    {% set total_valor = compras|sum(attribute='precio_venta')|multiply(compras|sum(attribute='cantidad')) %}
+                    {% set total_inversion = 0 %}
+                    {% set total_valor = 0 %}
+                    {% for compra in compras %}
+                        {% set total_inversion = total_inversion + (compra['cantidad'] * compra['precio_compra']) %}
+                        {% set total_valor = total_valor + (compra['cantidad'] * compra['precio_venta']) %}
+                    {% endfor %}
                     
                     <div class="summary-card">
                         <h3>Resumen Total</h3>
                         <div class="summary-stats">
                             <div class="stat-item">
                                 <span class="stat-label">Total Invertido</span>
-                                <span class="stat-value buy">$0.00</span>
+                                <span class="stat-value buy">${{ "%.2f"|format(total_inversion) }}</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Valor Actual</span>
-                                <span class="stat-value sell">$0.00</span>
+                                <span class="stat-value sell">${{ "%.2f"|format(total_valor) }}</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Ganancia/Pérdida</span>
-                                <span class="stat-value profit">$0.00</span>
+                                <span class="stat-value profit">${{ "%.2f"|format(total_valor - total_inversion) }}</span>
                             </div>
                         </div>
                     </div>
