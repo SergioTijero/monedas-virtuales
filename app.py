@@ -362,7 +362,7 @@ def registrar_moneda():
     if request.method == 'POST':
         try:
             # Validar que todos los campos requeridos estén presentes
-            campos_requeridos = ['tipo', 'stock', 'precio_compra', 'precio_venta', 'categoria']
+            campos_requeridos = ['tipo', 'stock', 'precio_compra', 'precio_venta']
             for campo in campos_requeridos:
                 if campo not in request.form or not request.form[campo]:
                     flash(f"❌ El campo {campo} es obligatorio", "danger")
@@ -372,7 +372,7 @@ def registrar_moneda():
             stock = int(request.form['stock'])
             precio_compra = float(request.form['precio_compra'])
             precio_venta = float(request.form['precio_venta'])
-            categoria = request.form['categoria']
+            categoria = request.form.get('categoria', 'Otros')  # Valor por defecto si no existe
             stock_minimo = int(request.form.get('stock_minimo', 10))
 
             # Validaciones adicionales

@@ -89,6 +89,44 @@ def verificar_dependencias():
         print("Ejecuta: pip3 install -r requirements.txt")
         return False
 
+def actualizar_codigo_app():
+    """Corregir validaciones en app.py"""
+    print("🔧 Actualizando validaciones en app.py...")
+    
+    if not os.path.exists('app.py'):
+        print("❌ No se encontró app.py")
+        return False
+    
+    try:
+        with open('app.py', 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Quitar categoria de campos requeridos
+        old_validation = "campos_requeridos = ['tipo', 'stock', 'precio_compra', 'precio_venta', 'categoria']"
+        new_validation = "campos_requeridos = ['tipo', 'stock', 'precio_compra', 'precio_venta']"
+        
+        if old_validation in content:
+            content = content.replace(old_validation, new_validation)
+            
+            # También actualizar la asignación de categoria
+            old_categoria = "categoria = request.form['categoria']"
+            new_categoria = "categoria = request.form.get('categoria', 'Otros')  # Valor por defecto si no existe"
+            
+            content = content.replace(old_categoria, new_categoria)
+            
+            with open('app.py', 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            print("✅ Validaciones en app.py actualizadas")
+            return True
+        else:
+            print("⚠️ No se encontró el texto a reemplazar en app.py")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Error actualizando app.py: {e}")
+        return False
+
 def main():
     print("=== Script de Actualización EC2 ===\n")
     
@@ -106,7 +144,12 @@ def main():
         return
     
     # Actualizar template
-    if actualizar_template_compras():
+    template_ok = actualizar_template_compras()
+    
+    # Actualizar código app.py
+    app_ok = actualizar_codigo_app()
+    
+    if template_ok and app_ok:
         print("\n🎉 Actualización completada exitosamente!")
         print("\nPróximos pasos:")
         print("1. python3 fix_hash_problem.py  # Si aún tienes problemas de login")
@@ -115,6 +158,9 @@ def main():
     else:
         print("\n⚠️ Algunos problemas durante la actualización")
         print("Puedes subir los archivos manualmente desde tu repositorio local")
+    
+    # Actualizar código de app.py
+    actualizar_codigo_app()
 
 if __name__ == "__main__":
     main()
